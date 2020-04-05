@@ -1,0 +1,13 @@
+extends ../layout/main
+
+block variables
+	- var pageClass = 'index-page'
+	- var title = "Index"
+
+block content
+	section.main
+		.container
+			.row
+				.col-12
+					h1 Hello !
+					+item('Hello item', 'Item 1')
