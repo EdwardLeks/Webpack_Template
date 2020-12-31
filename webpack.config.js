@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyPlugin = require("copy-webpack-plugin");
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -38,11 +38,15 @@ const optimization = () => {
 }
 
 const cssLoaders = extra => {
-	const loaders = [{
-		loader: MiniCssExtractPlugin.loader
-	}, 
-	'css-loader',
-	'postcss-loader'
+	const loaders = [
+		{
+			loader: MiniCssExtractPlugin.loader,
+			options: {
+				publicPath: ''
+			}
+		},
+		'css-loader', 
+		'postcss-loader',
 	]	
 
 	if(extra){
@@ -66,17 +70,18 @@ const plugins = () => {
 			}
 		})),
 		new CleanWebpackPlugin(),
-		new CopyWebpackPlugin([
-			{
-				from: path.resolve(__dirname, 'src/img'),
-				to: path.resolve(__dirname, './dist/img'),
-				ignore: [
-					{
-						glob: 'svg/#'
+		new CopyPlugin({
+      patterns: [
+				{ 
+					from: path.resolve(__dirname, 'src/img'),
+					to: path.resolve(__dirname, './dist/img'),
+					noErrorOnMissing: true,
+					globOptions: {
+						ignore: ["img/svg/*.svg"],
 					}
-				]
-			}
-		]),
+				}
+			],
+    }),
 		new MiniCssExtractPlugin({
 			filename: '[name].css',
 		})
@@ -106,7 +111,7 @@ module.exports = {
 		port: 4200,
 		hot: isDev
 	},
-	devtool: isDev ? 'source-map' : '',
+	devtool: isProd ? false : 'source-map',
 	//Plugins
 	plugins: plugins(),
 	//Test files
@@ -126,7 +131,7 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpe?g|gif)$/i,
-				loaders: [
+				use: [
 					{
 						loader: 'file-loader',
 						options: {
@@ -150,6 +155,18 @@ module.exports = {
 			{
 				test: /\.svg$/,
 				loader: 'svg-url-loader'
+			},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							'@babel/preset-env'
+						]
+					}
+				}
 			}
 		]
 	}
