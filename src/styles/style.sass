@@ -1,19 +1,15 @@
+@import 'libs'
 @import 'fonts'
 @import 'vars'
 
 *  
-	margin: 0;
+	margin: 0
 	padding: 0
 	border: 0
 
 body
 	background-color: $main
 	font-family: $font
-
-.header
-	width: 100%
-	min-height: 150px
-	background-color: $accent
 
 section
 	width: 100%
@@ -36,10 +32,33 @@ a
 	&:hover
 		color: $accent
 
+.button
+	padding: 10px 20px
+	background-color: $accent
+	border-radius: $radius
+	color: $main
+	transition: $mt
+	&:hover
+		box-shadow: $shadow
+
+.header
+	width: 100%
+	min-height: 150px
+	background-color: $accent
+	svg
+		width: 100px
+		height: 100px
+		path 
+			fill: $main
+			
 .footer
 	width: 100%
 	min-height: 150px
 	background-color: $text
-
+	h2
+		color: $main
 
 @import 'index'
+
+// Always at the end
+@import 'media'

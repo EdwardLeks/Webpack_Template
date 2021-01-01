@@ -5,9 +5,13 @@
 		display: flex
 		justify-content: center
 	&__picture
-		width: 640px
+		width: 100%
 		height: 427px
-		box-shadow: $shadow
 		background-image: url('../img/background.jpg')
-	&--active
-		box-shadow: $shadow
+		background-size: contain
+		background-repeat: no-repeat
+		background-position: center
+		&--active
+			box-shadow: $shadow
+	&__button
+		@extend .button
